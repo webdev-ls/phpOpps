@@ -99,6 +99,10 @@ class Db {
         $this->run($this->insert);
         return $this->conn->insert_id;
     }
+
+    public function __destruct(){
+        $this->conn->close();
+    }
 }
 
 

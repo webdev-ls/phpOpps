@@ -1,8 +1,11 @@
 <?php
 require_once 'Db.php';
 require_once 'Calc.php';
+require_once 'CalcTrait.php';
 
 class Employee{
+
+    use CalcTrait;
 
     public $table = "users";
     public $companyCode = "users";
@@ -46,9 +49,15 @@ class Employee{
     public function addEmployee($data){
         $this->db->insert("users",$data);
     }
+
+    public function __destruct(){
+        echo "i am descrict";
+    }
 }
 
 $emp = new Employee("learningsessions");
+
+$emp->getSum();
 
 echo Calc::sum(1,2,3,4);
 
