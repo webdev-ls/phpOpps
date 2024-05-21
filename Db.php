@@ -17,7 +17,11 @@ class Db {
         $this->conn = new Mysqli($this->hostname,$this->username,$this->password,$this->dbname);
     }
 
+    public function last_query(){
+       return $this->last_query;
+    }
     public function run($query){
+        $this->last_query = $query;
         $result = $this->conn->query($query);
         return $result;
     }
@@ -33,10 +37,7 @@ class Db {
     }
 
     public function get(){
-        echo $this->update . $this->where;
-        if(!empty($this->select)){
-            $sql = $this->select. $this->from . $this->where;
-        }
+        $sql = $this->select. $this->from . $this->where;
         return $this->run($sql);
     }
 
@@ -63,6 +64,7 @@ class Db {
     }
         
     private function createWhere($args){
+        print_r($args); 
         $args[1] = $this->conn->real_escape_string($args[1]);
         if(empty($this->where)){
             $this->where .= " WHERE `".$args[0]."` = '".$args[1]."' ";
@@ -94,7 +96,8 @@ class Db {
         $fieldData = array_values($data); 
         // escape strings here using real escape string
         $this->insert .= "'".implode("','",$fieldData)."') ";
-        return $this->run($this->insert);
+        $this->run($this->insert);
+        return $this->conn->insert_id;
     }
 }
 
